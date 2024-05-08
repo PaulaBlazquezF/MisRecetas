@@ -1,0 +1,37 @@
+.body {
+    margin: 20px;
+    display: flex;
+    flex-direction: column; /* Cambiar la dirección del flexbox a columna */
+    align-items: center; /* Centrar los elementos horizontalmente */
+    justify-content: center; /* Centrar los elementos verticalmente */    
+}
+
+body{
+    background-image: url('../static/img/fondo.jpg'); /* Reemplaza 'ruta/a/tu/imagen.jpg' con la ruta de tu imagen */
+    background-size: cover; /* Para que la imagen de fondo cubra todo el área del cuerpo */
+    background-position: center; /* Para centrar la imagen de fondo */
+    opacity: 0.8;
+}
+
+.null {
+    margin-bottom: 20px; /* Espacio entre el mensaje y el botón */
+}
+
+/* Resto de tu CSS aquí */
+.cards {
+    margin: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.card {
+    width: calc(33.33% - 20px); /* El 20px es para el margen entre las tarjetas */
+    margin: 10px;
+}
+
+@media (max-width: 768px) {
+    .card {
+        width: calc(50% - 20px); /* En pantallas más pequeñas, dos tarjetas por fila */
+    }
+}

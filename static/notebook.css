@@ -1,0 +1,37 @@
+body{
+    background-image: url('../static/img/fondo.jpg'); /* Reemplaza 'ruta/a/tu/imagen.jpg' con la ruta de tu imagen */
+    background-size: cover; /* Para que la imagen de fondo cubra todo el área del cuerpo */
+    background-position: center; /* Para centrar la imagen de fondo */
+    opacity: 0.8;
+}
+
+.contenedor {
+    display: flex; /* Establece el contenedor como un contenedor flexible */
+    margin: 20px;
+}
+
+section{
+    background-color: aliceblue;
+    
+}
+
+.section-one {
+    flex: 1; /* Expande esta sección para ocupar el espacio disponible */
+    margin-right: 20px; /* Ajusta el espacio entre las secciones */
+    padding: 8%;
+    font-family: 'Montserrat', sans-serif;
+    color:black;
+    display: flex;
+    flex-direction: column; /* Cambiar la dirección del flexbox a columna */
+    align-items: center; /* Centrar los elementos horizontalmente */
+    justify-content: center; /* Centrar los elementos verticalmente */
+}
+
+.section-two {
+    flex: 1; /* Expande esta sección para ocupar el espacio disponible */
+    display: flex; /* Establece el contenedor como un contenedor flexible */
+    padding: 8%;
+    flex-direction: column; /* Cambiar la dirección del flexbox a columna */
+    align-items: center; /* Centrar los elementos horizontalmente */
+    justify-content: center; /* Centrar los elementos verticalmente */
+}

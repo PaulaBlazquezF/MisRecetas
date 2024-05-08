@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='notebook.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    {% include 'nav.html' %}
+    <div class = "contenedor">
+        <section class = "section-one">
+            <h1>AÑADIR UNA RECETA</h1>
+            <form action="/guardar_receta" method="post">
+                <label for="titulo">Título:</label><br>
+                <input type="text" id="titulo" name="titulo" required><br><br>
+                
+                <label for="fecha">Fecha:</label><br>
+                <input type="date" id="fecha" name="fecha" required><br><br>
+                
+                <label for="tiempo">Tiempo aproximado:</label><br>
+                <input type="text" id="tiempo" name="tiempo" required><br><br>
+                
+                <label for="ingredientes">Ingredientes:</label><br>
+                <textarea id="ingredientes" name="ingredientes" rows="4" cols="50" required></textarea><br><br>
+                
+                <label for="preparacion">Preparación:</label><br>
+                <textarea id="preparacion" name="preparacion" rows="4" cols="50" required></textarea><br><br>
+                
+                <input type="submit" value="Guardar Receta">
+                <p> {{ mensaje }}</p>
+            </form>
+        </section>
+        <section class = "section-two">
+            <h1>TUS RECETAS</h1>
+            
+            <form action="/buscar_receta" method="post">
+                <div class="input-group mb-3">
+                    <input id="receta" type="text" class="form-control" placeholder="Buscar por título" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <input class="btn btn-outline-secondary" type="submit" value = "Buscar">
+                    </div>
+                </div>
+            </form>
+            
+            <p> {{ recetas }}</p>
+            {% if recetas %}
+                {% for receta in recetas %}
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-header">
+                            {{ receta['titulo'] }}
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Fecha: {{ receta['fecha'] }}</li>
+                            <li class="list-group-item">Tiempo: {{ receta['tiempo'] }}</li>
+                            <li class="list-group-item">Ingredientes: {{ receta['ingredientes'] }}</li>
+                            <li class="list-group-item">Preparación: {{ receta['preparacion'] }}</li>
+                        </ul>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p> {{ mensaje }}</p>
+            {% endif %} 
+              
+        </section>
+    </div>
+
+    {% include 'footer.html' %} 
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</html>
