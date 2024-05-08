@@ -10,30 +10,27 @@
 </head>
 <body>
     {% include 'nav.html' %}
-    <div class = "body"> 
-        {%if platos%}
-        {% for item in platos %}
-        <div class = "cards">
-            <div class="card" style="width: 18rem;">
+
+    <div class = "cards">
+        <div class= "card-group">
+            {% for receta in platos %}
+            <div class="card" style="width: 30%;">
+                <img class="card-img-top" src="{{ receta['imagen'] }}" alt="Card image cap">
                 <div class="card-body">
-                <h5 class="card-title">{{ platos.title }}</h5>
-                <p class="card-text">{{ platos.ingredients }}</p>
-                <a href="#" class="card-link">Saber más</a>
+                    <h5 class="card-title">{{ receta['titulo'] }}</h5>
+                    <p>Ingredientes: </p>
+                    <ul class="list-group list-group-flush custom-list"> <!-- Aplicar la clase custom-list -->
+                        {% for ingrediente in receta['ingredientes'] %}
+                            <li class="list-group-item">{{ ingrediente }}</li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-        {%else%}
-        <div class = "null">
-            <p>No hay información disponible en estos momentos</p>
-        </div>
-    
-        {% endif %}
-
-        <form id="refreshForm" method="post" href="{{ url_for('ideas') }}">
-            <button type="submit" class="btn btn-primary btn-lg">Refresh</button>
-        </form>
     </div>
+    
+
 
     {% include 'footer.html' %} 
 </body>

@@ -19,10 +19,12 @@ body{
 
 /* Resto de tu CSS aquí */
 .cards {
-    margin: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+  margin: 5%;
+}
+
+.custom-list {
+    list-style-type: disc; /* Establecer el marcador de lista como un punto */
+    margin-left: 20px; /* Opcional: agregar margen izquierdo para separar el punto del texto */
 }
 
 .card {
