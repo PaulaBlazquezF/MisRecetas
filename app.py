@@ -109,14 +109,14 @@ def buscar_recetas(receta):
 
         # Query SQL para buscar recetas que coincidan con el término de búsqueda en el título
         sql = "SELECT * FROM recetas WHERE titulo LIKE %s"
-        cursor.execute(sql, receta)
+        cursor.execute(sql, ('%' + receta + '%'))
         recetas = cursor.fetchall()
 
         # Cerrar la conexión
         cursor.close()
         conexion.close()
 
-        return True, recetas  # Retorna éxito y las recetas encontradas
+        return recetas  # Retorna éxito y las recetas encontradas
 
     except Exception as e:
         return False, str(e)  # Retorna False y el mensaje de error si hay algún problema
@@ -185,10 +185,11 @@ def ideas():
     #Si la solicitud fue exitosa (código de estado 200), retornamos la respuesta JSON
     if response.status_code == 200:
         datos = response.json()['d']
+        primeros_cinco = datos[:5]
         # Crear una lista para almacenar las recetas formateadas
         recetas_formateadas = []
 
-        for receta in datos:
+        for receta in primeros_cinco:
             # Obtener el título de la receta
             titulo_receta = receta['Title']
             
@@ -233,16 +234,38 @@ def guardar_receta():
     return render_template('notebook.html', mensaje = mensaje)
 
 
-@app.route('/buscar_receta', methods=['POST'])
+@app.route('/buscar_receta', methods=['GET', 'POST'])
 def buscar_receta():
-    # Obtener los datos del formulario
-    receta = request.form.get('receta')
+    if request.method == 'POST':
+        # Obtener los datos del formulario
+        titulo_buscado = request.form.get('titulo')
     
-    exito, recetas = buscar_recetas(receta)
+        recetas = buscar_recetas(titulo_buscado)
     
-    if exito:
+    if recetas:
+        lista_receta = []
+
+        for receta in recetas:
+            titulo_receta = receta[1]  # Acceder al valor de la segunda columna (suponiendo que sea el título)
+            fecha_receta = receta[2]  # Acceder al valor de la tercera columna (suponiendo que sea la fecha)
+            tiempo_receta = receta[3]  # Acceder al valor de la cuarta columna (suponiendo que sea el tiempo)
+            ingredientes_receta = receta[4]  # Acceder al valor de la quinta columna (suponiendo que sean los ingredientes)
+            preparacion_receta = receta[5]  # Acceder al valor de la sexta columna (suponiendo que sea la preparación)
+
+        # Crear un diccionario para almacenar los valores de esta receta
+            receta = {
+                'titulo': titulo_receta,
+                'fecha': fecha_receta,
+                'tiempo': tiempo_receta,
+                'ingredientes': ingredientes_receta,
+                'preparacion': preparacion_receta
+            }
+
+            # Agregar el diccionario de la receta a la lista de recetas
+            lista_receta.append(receta)
+
         # Si la búsqueda fue exitosa, mostrar los resultados
-        return render_template('notebook.html', recetas=recetas)
+        return render_template('notebook.html', recetas=lista_receta)
     else:
         # Si ocurrió un error, mostrar un mensaje de error
         return render_template('notebook.html', mensaje="Error al buscar receta")

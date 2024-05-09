@@ -33,30 +33,16 @@
         </section>
         <section class = "section-two">
             <h1>TUS RECETAS</h1>
-            
+
             <form action="/buscar_receta" method="post">
-                <div class="input-group mb-3">
-                    <input id="receta" type="text" class="form-control" placeholder="Buscar por título" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                    <div class="input-group-append">
-                        <input class="btn btn-outline-secondary" type="submit" value = "Buscar">
-                    </div>
-                </div>
+                <label for="titulo">Título de la Receta:</label>
+                <input type="text" id="titulo" name="titulo">
+                <button type="submit">Buscar</button>
             </form>
             
-            <p> {{ recetas }}</p>
             {% if recetas %}
                 {% for receta in recetas %}
-                    <div class="card" style="width: 18rem;">
-                        <div class="card-header">
-                            {{ receta['titulo'] }}
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">Fecha: {{ receta['fecha'] }}</li>
-                            <li class="list-group-item">Tiempo: {{ receta['tiempo'] }}</li>
-                            <li class="list-group-item">Ingredientes: {{ receta['ingredientes'] }}</li>
-                            <li class="list-group-item">Preparación: {{ receta['preparacion'] }}</li>
-                        </ul>
-                    </div>
+                    {{receta}}
                 {% endfor %}
             {% else %}
                 <p> {{ mensaje }}</p>

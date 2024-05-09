@@ -11,6 +11,7 @@
 <body>
     {% include 'nav.html' %}
 
+    {% if platos %}
     <div class = "cards">
         <div class= "card-group">
             {% for receta in platos %}
@@ -29,6 +30,11 @@
             {% endfor %}
         </div>
     </div>
+    {% else %}
+    <div>
+        <p>No se ha encontrado infromación</p>
+    </div>
+    {% endif %}
     
 
 
