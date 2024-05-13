@@ -30,8 +30,11 @@ section{
 .section-two {
     flex: 1; /* Expande esta sección para ocupar el espacio disponible */
     display: flex; /* Establece el contenedor como un contenedor flexible */
-    padding: 8%;
+    padding: 2%;
     flex-direction: column; /* Cambiar la dirección del flexbox a columna */
     align-items: center; /* Centrar los elementos horizontalmente */
-    justify-content: center; /* Centrar los elementos verticalmente */
+    justify-content: space-around; /* Centrar los elementos verticalmente */
+    
+    
 }
+

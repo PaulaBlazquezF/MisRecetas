@@ -121,6 +121,19 @@ def buscar_recetas(receta):
     except Exception as e:
         return False, str(e)  # Retorna False y el mensaje de error si hay algún problema
 
+def obtenerPrimeras_recetas():
+    conexion = conectar_bd()
+    cursor = conexion.cursor()
+    sql = "SELECT * FROM recetas LIMIT 5"
+    
+    cursor.execute(sql)
+    recetas = cursor.fetchall()
+
+    cursor.close()
+    conexion.close()
+
+    return recetas
+
 
 @app.route('/')
 def index():
@@ -242,18 +255,49 @@ def buscar_receta():
     
         recetas = buscar_recetas(titulo_buscado)
     
-    if recetas:
+        if recetas:
+            lista_receta = []
+
+            for receta in recetas:
+                titulo_receta = receta[1]  # Acceder al valor de la segunda columna (suponiendo que sea el título)
+                fecha_receta = receta[2]  # Acceder al valor de la tercera columna (suponiendo que sea la fecha)
+                tiempo_receta = receta[3]  # Acceder al valor de la cuarta columna (suponiendo que sea el tiempo)
+                ingredientes_receta = receta[4]  # Acceder al valor de la quinta columna (suponiendo que sean los ingredientes)
+                preparacion_receta = receta[5]  # Acceder al valor de la sexta columna (suponiendo que sea la preparación)
+
+            # Crear un diccionario para almacenar los valores de esta receta
+                receta = {
+                    'titulo': titulo_receta,
+                    'fecha': fecha_receta,
+                    'tiempo': tiempo_receta,
+                    'ingredientes': ingredientes_receta,
+                    'preparacion': preparacion_receta
+                }
+
+                # Agregar el diccionario de la receta a la lista de recetas
+                lista_receta.append(receta)
+
+            # Si la búsqueda fue exitosa, mostrar los resultados
+            return render_template('notebook.html', recetas=lista_receta)
+        else:
+            # Si ocurrió un error, mostrar un mensaje de error
+            return render_template('notebook.html', mensaje="Error al buscar receta")
+
+    else: 
+        # Si no es un request POST, obtener las primeras 5 recetas de la base de datos
+        recetas = obtenerPrimeras_recetas()
+
         lista_receta = []
 
         for receta in recetas:
-            titulo_receta = receta[1]  # Acceder al valor de la segunda columna (suponiendo que sea el título)
-            fecha_receta = receta[2]  # Acceder al valor de la tercera columna (suponiendo que sea la fecha)
-            tiempo_receta = receta[3]  # Acceder al valor de la cuarta columna (suponiendo que sea el tiempo)
-            ingredientes_receta = receta[4]  # Acceder al valor de la quinta columna (suponiendo que sean los ingredientes)
-            preparacion_receta = receta[5]  # Acceder al valor de la sexta columna (suponiendo que sea la preparación)
+            # Procesar las recetas de la misma manera que en el caso de POST
+            titulo_receta = receta[1]
+            fecha_receta = receta[2]
+            tiempo_receta = receta[3]
+            ingredientes_receta = receta[4]
+            preparacion_receta = receta[5]
 
-        # Crear un diccionario para almacenar los valores de esta receta
-            receta = {
+            receta_dict = {
                 'titulo': titulo_receta,
                 'fecha': fecha_receta,
                 'tiempo': tiempo_receta,
@@ -261,15 +305,9 @@ def buscar_receta():
                 'preparacion': preparacion_receta
             }
 
-            # Agregar el diccionario de la receta a la lista de recetas
-            lista_receta.append(receta)
+            lista_receta.append(receta_dict)
 
-        # Si la búsqueda fue exitosa, mostrar los resultados
         return render_template('notebook.html', recetas=lista_receta)
-    else:
-        # Si ocurrió un error, mostrar un mensaje de error
-        return render_template('notebook.html', mensaje="Error al buscar receta")
-
 @app.route('/login')
 def login():
     return render_template('login.html')

@@ -32,22 +32,40 @@
             </form>
         </section>
         <section class = "section-two">
-            <h1>TUS RECETAS</h1>
+            <div> 
+                <h1>BUSCA RECETAS</h1>
 
-            <form action="/buscar_receta" method="post">
-                <label for="titulo">Título de la Receta:</label>
-                <input type="text" id="titulo" name="titulo">
-                <button type="submit">Buscar</button>
-            </form>
+                <form action="/buscar_receta" method="post">
+                    <label for="titulo">Título de la Receta:</label>
+                    <input type="text" id="titulo" name="titulo">
+                    <button type="submit">Buscar</button>
+                </form>
+            </div>
             
             {% if recetas %}
+            <div class = "cards">
+                <h1>TUS RECETAS</h1>
                 {% for receta in recetas %}
-                    {{receta}}
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ receta['titulo'] }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ receta['fecha'] }}</h6>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ receta['tiempo'] }}</h6>
+                        <p>Ingredientes: </p>
+                                    <ul class="list-group list-group-flush custom-list"> <!-- Aplicar la clase custom-list -->
+                                        {{receta['ingredientes']}}
+                                    </ul>
+                        <a href="#" class="card-link">Preparación</a>
+                    </div>
+                </div>
                 {% endfor %}
+            </div>
             {% else %}
-                <p> {{ mensaje }}</p>
-            {% endif %} 
-              
+            <div>
+                <p>No se ha encontrado infromación</p>
+            </div>
+            {% endif %}
+            
         </section>
     </div>
 
