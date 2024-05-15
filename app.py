@@ -53,11 +53,9 @@ def insertar_usuario(nombre, email, password):
             raise ValueError("Todos los campos son obligatorios")
         
         # Query SQL para insertar el usuario en la tabla 'usuarios'
-        sql = "INSERT INTO usuarios (nombre, email, password) VALUES (%s, %s, %s)"
-        valores = (nombre, email, password)
-
-        # Ejecutar la consulta SQL
-        cursor.execute(sql, valores)
+        sql = f"INSERT INTO usuarios (nombre, email, password) VALUES ('{nombre}', '{email}', '{password}');"
+        cursor.execute(sql)
+    
         
         # Confirmar los cambios en la base de datos
         conexion.commit()
@@ -80,18 +78,21 @@ def autenticar_usuario(email, password):
         cursor = conexion.cursor()
 
         # Consultar la base de datos para encontrar el usuario por su correo electrónico
-        sql = "SELECT * FROM usuarios WHERE email = %s"
-        cursor.execute(sql, (email,))
+        sql = f"SELECT email, password FROM usuarios WHERE email = '{email}';"
+        cursor.execute(sql, (email))
         usuario = cursor.fetchone()
 
         if usuario:
-            # Si se encontró el usuario, verificar la contraseña
-            if check_password_hash(usuario['contrasena'], password):
-                # Contraseña correcta, autenticación exitosa
-                return True, "Autenticación exitosa"
-            else:
-                # Contraseña incorrecta
-                return False, "Contraseña incorrecta"
+                # Accediendo a los elementos de la tupla por su posición
+                password_db = usuario[1]
+
+                # Verificar la contraseña
+                if password_db == password:
+                    # Contraseña correcta, autenticación exitosa
+                    return True, "Autenticación exitosa"
+                else:
+                    # Contraseña incorrecta
+                    return False, "Contraseña incorrecta"
         else:
             # Usuario no encontrado
             return False, "Usuario no encontrado"
@@ -107,8 +108,8 @@ def buscar_recetas(receta):
         cursor = conexion.cursor()
 
         # Query SQL para buscar recetas que coincidan con el término de búsqueda en el título
-        sql = "SELECT * FROM recetas WHERE titulo LIKE %s"
-        cursor.execute(sql, ('%' + receta + '%'))
+        sql = f"SELECT * FROM recetas WHERE titulo LIKE '%{receta}%';"
+        cursor.execute(sql)
         recetas = cursor.fetchall()
 
         # Cerrar la conexión
@@ -253,7 +254,7 @@ def buscar_receta():
         titulo_buscado = request.form.get('titulo')
     
         recetas = buscar_recetas(titulo_buscado)
-    
+        print(recetas)
         if recetas:
             lista_receta = []
 
@@ -307,6 +308,7 @@ def buscar_receta():
             lista_receta.append(receta_dict)
 
         return render_template('notebook.html', recetas=lista_receta)
+    
 @app.route('/login')
 def login():
     return render_template('login.html')
@@ -319,17 +321,18 @@ def crear_usuario():
     email = request.form.get('email')
     password = request.form.get('password')
 
+    # print(nombre, email, password)
+
     # Insertar el usuario en la base de datos
     exito, mensaje = insertar_usuario(nombre, email, password)
+
     # Redireccionar dependiendo del resultado de la inserción
-    if exito:
-        return render_template('index.html')
-    else:
-        return render_template('login.html', mensaje_registro=mensaje)
+
+    return render_template('login.html', mensaje_registro=mensaje)
     
 # Ruta para la autenticación de usuario
 @app.route('/autenticar', methods=['POST'])
-def autenticar_usuario():
+def procesar_autenticacion():
     # Obtener los datos del formulario
     email = request.form.get('email')
     password = request.form.get('password')
